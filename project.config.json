@@ -1,0 +1,53 @@
+{
+	"description": "A WePY project",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx6f16e6310c7c74f3",
+	"projectname": "appointment",
+	"miniprogramRoot": "dist/",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 2,
+			"list": [
+				{
+					"id": -1,
+					"name": "排课",
+					"pathName": "pages/class-assign",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "输入信息",
+					"pathName": "pages/info",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "约课",
+					"pathName": "pages/class-order"
+				}
+			]
+		}
+	}
+}

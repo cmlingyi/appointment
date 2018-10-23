@@ -1,0 +1,105 @@
+<style lang="less">
+.assign-page {
+  height: 100%;
+  color: #000;
+  padding: 20rpx;
+  font-size: 28rpx;
+  .assign {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+    }
+    &__title {
+      flex: 1;
+      border: 1rpx solid #999;
+      border-radius: 10rpx;
+      padding: 0 20rpx;
+    }
+    &__add-btn {
+      margin-left: 20rpx;
+    }
+    &__main {
+      margin: 20rpx 0;
+      // border: 1px solid #999;
+      min-height: 500rpx;
+    }
+    &__footer {
+      margin-top: 40rpx;
+    }
+    &__submit-btn {
+      background-color: #6db3be;
+      color: #e2e7e2;
+    }
+    // 表格
+    &__th {
+      display: flex;
+      padding: 4rpx 0;
+      border-bottom: 1px solid #eee;
+    }
+    &__tr {
+      display: flex;
+      font-size: 24rpx;
+      border-bottom: 1px solid #eee;
+    }
+    &__td {
+      height: 60rpx;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 4rpx;
+    }
+    &__check {
+    }
+    &__del-btn {
+      margin: 0;
+      padding: 0;
+      width: 50rpx;
+      height: 50rpx;
+      line-height: 50rpx;
+      text-align: center;
+      border: 1px solid #999;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="assign-page">
+    <view class="assign__header">
+      <input class="input-text assign__title" type="text" placeholder="请输入标题" />
+      <button class="assign__add-btn" size="mini">+</button>
+    </view>
+    <view class="assign__main">
+      <view class="assign__th">
+        <view class="assign__td" style="width: 60rpx">序号</view>
+        <view class="assign__td" style="flex:1">内容</view>
+        <view class="assign__td" style="width: 200rpx">附加</view>
+        <view class="assign__td" style="width: 80rpx">可选</view>
+        <view class="assign__td" style="width: 80rpx">操作</view>
+      </view>
+      <view class="assign__tr">
+        <view class="assign__td" style="width: 60rpx">1</view>
+        <view class="assign__td" style="flex:1">
+          <input class="input-text" />
+        </view>
+        <view class="assign__td" style="width: 200rpx">
+          <input class="input-text" />
+        </view>
+        <view class="assign__td" style="width: 80rpx">
+          <checkbox class="assign__check" color="#6db3be" />
+        </view>
+        <view class="assign__td" style="width: 80rpx">
+          <button class="assign__del-btn" size="mini">-</button>
+        </view>
+      </view>
+    </view>
+    <view class="assign__footer">
+      <button class="assign__submit-btn">提交</button>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class ClassEdit extends wepy.page {}
+</script>

@@ -1,0 +1,76 @@
+<style lang="less">
+.order-page {
+  height: 100%;
+  color: #000;
+  padding: 20rpx;
+  font-size: 28rpx;
+  .order {
+    &__header {
+      text-align: center;
+    }
+    // 表格
+    &__main {
+      margin: 20rpx 0;
+      // border: 1px solid #999;
+      min-height: 500rpx;
+    }
+    &__th {
+      display: flex;
+      padding: 4rpx 0;
+      border-bottom: 1px solid #eee;
+    }
+    &__tr {
+      display: flex;
+      font-size: 24rpx;
+      border-bottom: 1px solid #eee;
+    }
+    &__td {
+      height: 60rpx;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 4rpx;
+    }
+    &__submit-btn {
+      background-color: #6db3be;
+      color: #e2e7e2;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="order-page">
+    <view class="order__header">
+      <text>这是课表名称</text>
+    </view>
+    <view class="order__main">
+      <view class="order__th">
+        <view class="order__td" style="width: 60rpx">序号</view>
+        <view class="order__td" style="flex:1">内容</view>
+        <view class="order__td" style="width: 200rpx">附加</view>
+        <view class="order__td" style="width: 80rpx">选择</view>
+      </view>
+      <view class="order__tr">
+        <view class="order__td" style="width: 60rpx">1</view>
+        <view class="order__td" style="flex:1">
+          10-11点
+        </view>
+        <view class="order__td" style="width: 200rpx">
+          陈密
+        </view>
+        <view class="order__td" style="width: 80rpx">
+          <checkbox class="assign__check" color="#6db3be" />
+        </view>
+      </view>
+    </view>
+    <view class="order__footer">
+      <button class="order__submit-btn">提交</button>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class ClassOrder extends wepy.page {}
+</script>
