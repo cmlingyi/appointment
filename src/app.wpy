@@ -11,8 +11,8 @@
 </style>
 
 <script>
-import wepy from 'wepy'
-import 'wepy-async-function'
+import wepy from 'wepy';
+import 'wepy-async-function';
 
 export default class extends wepy.app {
   config = {
@@ -35,23 +35,54 @@ export default class extends wepy.app {
   };
 
   constructor() {
-    super()
-    this.use('requestfix')
+    super();
+    this.use('requestfix');
   }
 
-  onLaunch() {}
-
-  getUserInfo(cb) {
-    const that = this
-    if (this.globalData.userInfo) {
-      return this.globalData.userInfo
+  onLaunch() {
+    this.initCloud();
+    this.getUserInfo();
+    if (!this.userInfo) {
+      wepy.redirectTo({
+        url: 'pages/info.wpy'
+      });
     }
-    wepy.getUserInfo({
-      success(res) {
-        that.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
-      }
-    })
+  }
+  initCloud() {
+    wx.cloud.init({
+      env: 'test-f6bbeb',
+      traceUser: true
+    });
+    wx.cloud
+      .callFunction({
+        // 云函数名称
+        name: 'add',
+        // 传给云函数的参数
+        data: {
+          a: 1,
+          b: 2
+        }
+      })
+      .then(res => {
+        console.log(res.result); // 3
+      })
+      .catch(console.error);
+  }
+  initDB() {
+    // const db = wx.cloud.database({
+    //   env: 'test'
+    // })
+    // const user = db.collection('user')
+  }
+  getUserInfo() {
+    wepy
+      .getStorage({
+        key: 'userInfo'
+      })
+      .then(res => {
+        console.log(res);
+        this.userInfo = res;
+      });
   }
 }
 </script>

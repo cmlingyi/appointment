@@ -6,10 +6,11 @@ module.exports = {
     sourceType: 'module'
   },
   env: {
-    browser: true
+    browser: true,
+    es6: true
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: 'standard',
+  extends: ['standard', 'prettier'],
   // required to lint *.wpy files
   plugins: [
     'html'
