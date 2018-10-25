@@ -19,8 +19,8 @@ export default class extends wepy.app {
     pages: [
       'pages/home',
       'pages/info',
-      'pages/class-order',
-      'pages/class-assign'
+      'pages/lesson-order',
+      'pages/lesson-assign'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -43,8 +43,8 @@ export default class extends wepy.app {
     this.initCloud();
     this.getUserInfo();
     if (!this.userInfo) {
-      wepy.redirectTo({
-        url: 'pages/info.wpy'
+      wepy.reLaunch({
+        url: 'pages/info'
       });
     }
   }
@@ -75,14 +75,13 @@ export default class extends wepy.app {
     // const user = db.collection('user')
   }
   getUserInfo() {
-    wepy
-      .getStorage({
-        key: 'userInfo'
-      })
-      .then(res => {
+    wepy.getStorage({
+      key: 'userInfo',
+      success(res) {
         console.log(res);
         this.userInfo = res;
-      });
+      }
+    });
   }
 }
 </script>

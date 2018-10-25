@@ -16,7 +16,7 @@
     .form-cell {
       margin-top: 20rpx;
     }
-    .input__sex {
+    .input__gender {
       display: flex;
     }
     .input__submit {
@@ -32,11 +32,11 @@
     <form class="info__form">
       <view class="form-cell input__name">
         <text class="form-cell__key">请输入你的名字：</text>
-        <input class="input-text form-cell__value" type="text" />
+        <input class="input-text form-cell__value" type="text" focus bindinput="onNameInput" />
       </view>
-      <view class="form-cell input__sex">
+      <view class="form-cell input__gender">
         <text class="form-cell__key">性别：</text>
-        <radio-group class="form-cell__value">
+        <radio-group class="form-cell__value" bindchange="onGenderChange">
           <label>
             男
             <radio value="m" color="#6db3be"></radio>
@@ -49,7 +49,7 @@
       </view>
       <view class="form-cell input__phone">
         <text class="form-cell__key">手机号：</text>
-        <input class="input-text form-cell__value" type="number" />
+        <input class="input-text form-cell__value" type="number" bindinput="onPhoneInput" />
       </view>
       <button class="form-cell input__submit">提交</button>
     </form>
@@ -57,6 +57,13 @@
 </template>
 
 <script>
-import wepy from 'wepy'
-export default class Info extends wepy.page {}
+import wepy from 'wepy';
+export default class Info extends wepy.page {
+  data = {};
+  methods = {
+    onNameInput() {},
+    onGenderChange() {},
+    onPhoneInput() {}
+  };
+}
 </script>

@@ -99,5 +99,5 @@
 
 <script>
 import wepy from 'wepy';
-export default class ClassEdit extends wepy.page {}
+export default class LessonAssign extends wepy.page {}
 </script>

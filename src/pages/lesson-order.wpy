@@ -71,6 +71,6 @@
 </template>
 
 <script>
-import wepy from 'wepy'
-export default class ClassOrder extends wepy.page {}
+import wepy from 'wepy';
+export default class LessonOrder extends wepy.page {}
 </script>
