@@ -64,8 +64,8 @@
 <template>
   <view class="assign-page">
     <view class="assign__header">
-      <input class="input-text assign__title" type="text" placeholder="请输入标题" />
-      <button class="assign__add-btn" size="mini">+</button>
+      <input class="input-text assign__title" type="text" placeholder="请输入标题" bindinput="onTitleInput" />
+      <button class="assign__add-btn" size="mini" bindtap="onAddBtnClicked">+</button>
     </view>
     <view class="assign__main">
       <view class="assign__th">
@@ -75,29 +75,64 @@
         <view class="assign__td" style="width: 80rpx">可选</view>
         <view class="assign__td" style="width: 80rpx">操作</view>
       </view>
-      <view class="assign__tr">
-        <view class="assign__td" style="width: 60rpx">1</view>
+      <view class="assign__tr" wx:for="{{list}}" wx:key="{{index}}">
+        <view class="assign__td" style="width: 60rpx">{{index + 1}}</view>
         <view class="assign__td" style="flex:1">
-          <input class="input-text" />
+          <input class="input-text" bindinput="onContentInput" data-index="{{index}}" />
         </view>
         <view class="assign__td" style="width: 200rpx">
-          <input class="input-text" />
+          <input class="input-text" bindinput="onAdditionInput" data-index="{{index}}" />
         </view>
+        <checkbox-group class="assign__td" style="width: 80rpx"  bindchange="onCheckChange">
+          <checkbox class="assign__check" color="#6db3be" data-index="{{index}}" value="{{true}}" />
+        </checkbox-group>
         <view class="assign__td" style="width: 80rpx">
-          <checkbox class="assign__check" color="#6db3be" />
-        </view>
-        <view class="assign__td" style="width: 80rpx">
-          <button class="assign__del-btn" size="mini">-</button>
+          <button class="assign__del-btn" size="mini" bindtap="onDelBtnClicked" data-index="{{index}}">-</button>
         </view>
       </view>
     </view>
     <view class="assign__footer">
-      <button class="assign__submit-btn">提交</button>
+      <button class="assign__submit-btn" bindtap="onSubmit">提交</button>
     </view>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy';
-export default class LessonAssign extends wepy.page {}
+export default class LessonAssign extends wepy.page {
+  data = {
+    title: '',
+    list: []
+  };
+  methods = {
+    onTitleInput(e) {
+      this.title = e.detail.value;
+    },
+    onContentInput(e) {
+      const index = e.currentTarget.dataset.index;
+      this.list[index].content = e.detail.value;
+    },
+    onAdditionInput(e) {
+      const index = e.currentTarget.dataset.index;
+      this.list[index].addition = e.detail.value;
+    },
+    onCheckChange(e) {
+      const index = e.currentTarget.dataset.index;
+      console.log(e.detail.value);
+      this.list[index].checked = e.detail.value[0];
+    },
+    onDelBtnClicked(e) {
+      const index = e.currentTarget.dataset.index;
+      this.list.splice(index, 1);
+    },
+    onAddBtnClicked() {
+      // 添加一条内容
+      this.list.push({
+        content: '',
+        addition: '',
+        checked: false
+      });
+    }
+  };
+}
 </script>

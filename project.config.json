@@ -33,9 +33,9 @@
 			"current": 2,
 			"list": [
 				{
-					"id": -1,
+					"id": 0,
 					"name": "排课",
-					"pathName": "pages/class-assign",
+					"pathName": "pages/lesson-assign",
 					"query": ""
 				},
 				{
@@ -45,9 +45,10 @@
 					"query": ""
 				},
 				{
-					"id": -1,
+					"id": 2,
 					"name": "约课",
-					"pathName": "pages/class-order"
+					"pathName": "pages/lesson-order",
+					"query": ""
 				}
 			]
 		}

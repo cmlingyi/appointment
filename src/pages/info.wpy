@@ -51,7 +51,7 @@
         <text class="form-cell__key">手机号：</text>
         <input class="input-text form-cell__value" type="number" bindinput="onPhoneInput" />
       </view>
-      <button class="form-cell input__submit">提交</button>
+      <button class="form-cell input__submit" bindtap="onSubmit">提交</button>
     </form>
   </view>
 </template>
@@ -59,11 +59,37 @@
 <script>
 import wepy from 'wepy';
 export default class Info extends wepy.page {
-  data = {};
+  data = {
+    name: '',
+    gender: '',
+    phone: ''
+  };
   methods = {
-    onNameInput() {},
-    onGenderChange() {},
-    onPhoneInput() {}
+    onNameInput(e) {
+      this.name = e.detail.value;
+    },
+    onGenderChange(e) {
+      this.gender = e.detail.value;
+    },
+    onPhoneInput(e) {
+      this.phone = e.detail.value;
+    },
+    onSubmit() {
+      console.log('setStorage');
+      wepy.setStorage({
+        key: 'userInfo',
+        data: {
+          name: this.name,
+          gender: this.gender,
+          phone: this.phone
+        },
+        success() {
+          wepy.reLaunch({
+            url: 'pages/home'
+          });
+        }
+      });
+    }
   };
 }
 </script>

@@ -15,10 +15,10 @@
 
 <template>
   <view class="home-page">
-    <navigator url="/pages/class-order" hover-class="navigator-hover">
+    <navigator url="/pages/lesson-order" hover-class="navigator-hover">
       <button class="">约课</button>
     </navigator>
-    <navigator url="/pages/class-assign" hover-class="navigator-hover">
+    <navigator url="/pages/lesson-assign" hover-class="navigator-hover">
       <button class="">排课</button>
     </navigator>
     <navigator url="/pages/info" hover-class="navigator-hover">
@@ -28,6 +28,6 @@
 </template>
 
 <script>
-import wepy from 'wepy'
+import wepy from 'wepy';
 export default class Home extends wepy.page {}
 </script>

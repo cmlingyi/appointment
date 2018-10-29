@@ -75,13 +75,8 @@ export default class extends wepy.app {
     // const user = db.collection('user')
   }
   getUserInfo() {
-    wepy.getStorage({
-      key: 'userInfo',
-      success(res) {
-        console.log(res);
-        this.userInfo = res;
-      }
-    });
+    const value = wepy.getStorageSync('userInfo');
+    this.userInfo = value;
   }
 }
 </script>
