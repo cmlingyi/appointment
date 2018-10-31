@@ -83,8 +83,8 @@
         <view class="assign__td" style="width: 200rpx">
           <input class="input-text" bindinput="onAdditionInput" data-index="{{index}}" />
         </view>
-        <checkbox-group class="assign__td" style="width: 80rpx"  bindchange="onCheckChange">
-          <checkbox class="assign__check" color="#6db3be" data-index="{{index}}" value="{{true}}" />
+        <checkbox-group class="assign__td" style="width: 80rpx"  bindchange="onCheckChange" data-index="{{index}}" >
+          <checkbox class="assign__check" color="#6db3be" />
         </checkbox-group>
         <view class="assign__td" style="width: 80rpx">
           <button class="assign__del-btn" size="mini" bindtap="onDelBtnClicked" data-index="{{index}}">-</button>
@@ -119,7 +119,7 @@ export default class LessonAssign extends wepy.page {
     onCheckChange(e) {
       const index = e.currentTarget.dataset.index;
       console.log(e.detail.value);
-      this.list[index].checked = e.detail.value[0];
+      this.list[index].checked = !this.list[index].checked;
     },
     onDelBtnClicked(e) {
       const index = e.currentTarget.dataset.index;
@@ -132,6 +132,36 @@ export default class LessonAssign extends wepy.page {
         addition: '',
         checked: false
       });
+    },
+    onSubmit() {
+      wx.cloud
+        .callFunction({
+          // 云函数名称
+          name: 'assign',
+          // 传给云函数的参数
+          data: {
+            title: this.title,
+            list: this.list
+          }
+        })
+        .then(res => {
+          console.log(res.result); // 3
+          wepy.showToast({
+            title: '提交成功',
+            icon: 'none',
+            duration: 1000,
+            success() {
+              console.log('跳转到lesson-order');
+              wepy.reLaunch({
+                url: `pages/lesson-order?id=${res._id}`
+              });
+            },
+            fail(e) {
+              console.log(e);
+            }
+          });
+        })
+        .catch(console.error);
     }
   };
 }
