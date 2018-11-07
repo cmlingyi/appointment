@@ -42,35 +42,148 @@
 <template>
   <view class="order-page">
     <view class="order__header">
-      <text>这是课表名称</text>
+      <text>{{title}}</text>
     </view>
     <view class="order__main">
       <view class="order__th">
         <view class="order__td" style="width: 60rpx">序号</view>
         <view class="order__td" style="flex:1">内容</view>
-        <view class="order__td" style="width: 200rpx">附加</view>
-        <view class="order__td" style="width: 80rpx">选择</view>
+        <view class="order__td" style="width: 120rpx">选择</view>
       </view>
-      <view class="order__tr">
-        <view class="order__td" style="width: 60rpx">1</view>
+      <view class="order__tr" wx:for="{{list}}" wx:key="{{index}}">
+        <view class="order__td" style="width: 60rpx">{{index + 1}}</view>
         <view class="order__td" style="flex:1">
-          10-11点
+          {{item.content}}
         </view>
-        <view class="order__td" style="width: 200rpx">
-          陈密
-        </view>
-        <view class="order__td" style="width: 80rpx">
-          <checkbox class="assign__check" color="#6db3be" />
+        <view class="order__td" style="width: 120rpx">
+          <checkbox-group class="assign__td" style="width: 80rpx" wx:if="{{item.canChoose === true && !item.choosed}}" bindchange="onCheckChange" data-index="{{index}}">
+            <checkbox class="assign__check" color="#6db3be" value="true" />
+          </checkbox-group>
+          <view wx:elif="{{item.canChoose === false}}"></view>
+          <view wx:else>{{item.choosed[0].name}}</view>
         </view>
       </view>
     </view>
     <view class="order__footer">
-      <button class="order__submit-btn">提交</button>
+      <button class="order__submit-btn" bindtap="onSubmit">提交</button>
     </view>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy';
-export default class LessonOrder extends wepy.page {}
+export default class LessonOrder extends wepy.page {
+  onLoad(query) {
+    this.classId = query.id;
+    this.db = wx.cloud.database({
+      env: 'test-f6bbeb'
+    });
+    this.getList();
+  }
+  onShow() {
+    this.timer = setInterval(() => {
+      this.getList();
+    }, 2000);
+  }
+  onHide() {
+    clearInterval(this.timer);
+  }
+  data = {
+    classId: '',
+    title: '',
+    list: [],
+    _openid: '',
+    choosed: [],
+    canSubmit: false,
+    db: null
+  };
+  methods = {
+    onCheckChange(e) {
+      const index = e.currentTarget.dataset.index;
+      const values = e.detail.value;
+      if (values[0] === 'true') {
+        this.choosed.push(index);
+      } else {
+        const findIndex = this.choosed.indexOf(index);
+        if (findIndex !== -1) {
+          this.choosed.splice(findIndex, 1);
+        }
+      }
+    },
+    async onSubmit() {
+      if (!this.canSubmit) {
+        return;
+      } else {
+        this.canSubmit = false;
+      }
+      if (this.choosed.length > 1) {
+        wepy.showToast({
+          title: '只能选择一节课',
+          icon: 'none',
+          duration: 1000
+        });
+        this.canSubmit = true;
+      } else if (this.choosed.length === 0) {
+        wepy.showToast({
+          title: '请选择课程',
+          icon: 'none',
+          duration: 1000
+        });
+        this.canSubmit = true;
+      } else {
+        await this.getList();
+        const choosedIndex = this.choosed[0];
+        if (
+          !this.list[choosedIndex].choosed ||
+          this.list[choosedIndex].choosed.length === 0
+        ) {
+          console.log('可以添加');
+          const newList = this.list;
+          if (
+            Object.prototype.toString.call(newList[choosedIndex].choosed) !==
+            '[object Array]'
+          ) {
+            console.log('not a array');
+            newList[choosedIndex].choosed = [];
+          }
+          newList[choosedIndex].choosed.push({
+            name: this.$parent.globalData.userInfo.name,
+            openId: this._openid
+          });
+          console.log(newList);
+          const _ = this.db.command;
+          this.db
+            .collection('class')
+            .doc(this.classId)
+            .update({
+              data: {
+                list: _.set(newList)
+              }
+            })
+            .then(res => {
+              console.log(res);
+              this.getList();
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          console.log('不可以添加');
+        }
+      }
+    }
+  };
+  async getList() {
+    const res = await this.db
+      .collection('class')
+      .doc(this.classId)
+      .get();
+    const data = res.data;
+    this._openid = data._openid;
+    this.title = data.title;
+    this.list = data.list;
+    this.canSubmit = true;
+    this.$apply();
+  }
+}
 </script>

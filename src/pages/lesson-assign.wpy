@@ -71,7 +71,6 @@
       <view class="assign__th">
         <view class="assign__td" style="width: 60rpx">序号</view>
         <view class="assign__td" style="flex:1">内容</view>
-        <view class="assign__td" style="width: 200rpx">附加</view>
         <view class="assign__td" style="width: 80rpx">可选</view>
         <view class="assign__td" style="width: 80rpx">操作</view>
       </view>
@@ -80,12 +79,11 @@
         <view class="assign__td" style="flex:1">
           <input class="input-text" bindinput="onContentInput" data-index="{{index}}" />
         </view>
-        <view class="assign__td" style="width: 200rpx">
-          <input class="input-text" bindinput="onAdditionInput" data-index="{{index}}" />
+        <view class="assign__td" style="width: 80rpx">
+          <checkbox-group class="assign__td" style="width: 80rpx"  bindchange="onCheckChange" data-index="{{index}}" >
+            <checkbox class="assign__check" color="#6db3be" />
+          </checkbox-group>
         </view>
-        <checkbox-group class="assign__td" style="width: 80rpx"  bindchange="onCheckChange" data-index="{{index}}" >
-          <checkbox class="assign__check" color="#6db3be" />
-        </checkbox-group>
         <view class="assign__td" style="width: 80rpx">
           <button class="assign__del-btn" size="mini" bindtap="onDelBtnClicked" data-index="{{index}}">-</button>
         </view>
@@ -112,14 +110,9 @@ export default class LessonAssign extends wepy.page {
       const index = e.currentTarget.dataset.index;
       this.list[index].content = e.detail.value;
     },
-    onAdditionInput(e) {
-      const index = e.currentTarget.dataset.index;
-      this.list[index].addition = e.detail.value;
-    },
     onCheckChange(e) {
       const index = e.currentTarget.dataset.index;
-      console.log(e.detail.value);
-      this.list[index].checked = !this.list[index].checked;
+      this.list[index].canChoose = !this.list[index].canChoose;
     },
     onDelBtnClicked(e) {
       const index = e.currentTarget.dataset.index;
@@ -129,31 +122,32 @@ export default class LessonAssign extends wepy.page {
       // 添加一条内容
       this.list.push({
         content: '',
-        addition: '',
-        checked: false
+        canChoose: false
       });
     },
     onSubmit() {
-      wx.cloud
-        .callFunction({
-          // 云函数名称
-          name: 'assign',
-          // 传给云函数的参数
+      const db = wx.cloud.database({
+        env: 'test-f6bbeb'
+      });
+      db.collection('class')
+        .add({
           data: {
             title: this.title,
-            list: this.list
+            list: this.list,
+            createdAt: new Date()
           }
         })
         .then(res => {
-          console.log(res.result); // 3
+          console.log(res);
+          const id = res._id;
           wepy.showToast({
             title: '提交成功',
             icon: 'none',
             duration: 1000,
-            success() {
-              console.log('跳转到lesson-order');
+            success(res) {
+              console.log(`跳转到: /pages/lesson-order?id=${id}`);
               wepy.reLaunch({
-                url: `pages/lesson-order?id=${res._id}`
+                url: `/pages/lesson-order?id=${id}`
               });
             },
             fail(e) {

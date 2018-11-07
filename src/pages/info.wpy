@@ -76,16 +76,19 @@ export default class Info extends wepy.page {
     },
     onSubmit() {
       console.log('setStorage');
+      const _this = this;
+      const data = {
+        name: this.name,
+        gender: this.gender,
+        phone: this.phone
+      };
       wepy.setStorage({
         key: 'userInfo',
-        data: {
-          name: this.name,
-          gender: this.gender,
-          phone: this.phone
-        },
+        data: data,
         success() {
+          _this.$parent.globalData.userInfo = data;
           wepy.reLaunch({
-            url: 'pages/home'
+            url: '/pages/home'
           });
         }
       });
