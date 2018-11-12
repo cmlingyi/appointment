@@ -151,22 +151,33 @@ export default class LessonOrder extends wepy.page {
             openId: this._openid
           });
           console.log(newList);
-          const _ = this.db.command;
-          this.db
-            .collection('class')
-            .doc(this.classId)
-            .update({
-              data: {
-                list: _.set(newList)
-              }
-            })
-            .then(res => {
+          wx.cloud.callFunction({
+            name: 'order',
+            data: {
+              classId: this.classId,
+              newList: newList
+            },
+            complete: res => {
               console.log(res);
               this.getList();
-            })
-            .catch(err => {
-              console.log(err);
-            });
+            }
+          });
+          // const _ = this.db.command;
+          // this.db
+          //   .collection('class')
+          //   .doc(this.classId)
+          //   .update({
+          //     data: {
+          //       list: _.set(newList)
+          //     }
+          //   })
+          //   .then(res => {
+          //     console.log(res);
+          //     this.getList();
+          //   })
+          //   .catch(err => {
+          //     console.log(err);
+          //   });
         } else {
           console.log('不可以添加');
         }
@@ -176,9 +187,11 @@ export default class LessonOrder extends wepy.page {
   async getList() {
     const res = await this.db
       .collection('class')
-      .doc(this.classId)
+      .where({
+        _id: this.classId
+      })
       .get();
-    const data = res.data;
+    const data = res.data[0];
     this._openid = data._openid;
     this.title = data.title;
     this.list = data.list;

@@ -15,7 +15,7 @@
 
 <template>
   <view class="home-page">
-    <navigator url="/pages/lesson-order" hover-class="navigator-hover">
+    <navigator url="/pages/lesson-list" hover-class="navigator-hover">
       <button class="">约课</button>
     </navigator>
     <navigator url="/pages/lesson-assign" hover-class="navigator-hover">
